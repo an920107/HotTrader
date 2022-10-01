@@ -1,0 +1,9 @@
+#!/bin/sh
+
+file info/* | grep "ISO-8859" | awk 'BEGIN {FS=":"};{print $1}' > big5.list
+
+while read file;
+do
+  iconv -f big5 -t utf8 -o "${file}.utf8" "${file}"
+  mv "${file}.utf8" "${file}"
+done < big5.list

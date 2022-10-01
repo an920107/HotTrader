@@ -1,0 +1,27 @@
+#!/bin/sh
+
+path="/home/csie/Project"
+
+cd $path
+
+cd webclimber
+python3 main.py
+./merge
+./last12
+cp last_12_id /var/www/html/traders-data
+
+cd ../traders_info_crawler
+python3 main.py
+./merge
+./convert_encode
+cp info/* /var/www/html/traders-info
+cp photo/* /var/www/html/traders-photo
+
+cd ../traders_data_crawler
+python3 main.py
+./merge
+./gensql
+mysql -u tradersuser -pTRADERSuser <tradersdb.sql
+mysql -u tradersuser -pTRADERSuser <delete-empty.sql
+cp data/* /var/www/html/traders-data
+
